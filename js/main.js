@@ -23,19 +23,23 @@ var NAMES = [
   'Ксюша',
   'Наташа',
   'Марина',
-]
+];
 
 function getElement(array) {
   return array[Math.floor(Math.random() * array.length)];
-};
+}
 
+function getRandomFromInterval(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 function createPhotoArray(number) {
   for (var i = 1; i <= number; i++) {
     photos.push({
       avatar: 'photos/' + i + '.jpg',
       likes: getRandomFromInterval(15, 200),
-      message: getElement(COMMENTS), //по заданию тут должен быть массив из нескольких комментариев. Я не знаю как сюда массив поставить
+      message: getElement(COMMENTS),
+//по заданию тут должен быть массив из нескольких комментариев. Я не знаю как сюда массив поставить
       name: getElement(NAMES)
     });
   }
@@ -43,7 +47,7 @@ function createPhotoArray(number) {
 };
 createPhotoArray(photosQuantity);
 
-var renderPhotos = function () { //не знаю, какой аргумент передавать в эту функцию
+var renderPhotos = function() { //не знаю, какой аргумент передавать в эту функцию
   var photoElement = similarPictureTemplate.cloneNode(true);
 
   photoElement.querySelector('.picture__img').setAttribute ('src', photos.avatar);
