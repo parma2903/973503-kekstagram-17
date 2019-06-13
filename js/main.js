@@ -39,21 +39,19 @@ function createPhotoArray(number) {
       avatar: 'photos/' + i + '.jpg',
       likes: getRandomFromInterval(15, 200),
       message: getElement(COMMENTS),
-//по заданию тут должен быть массив из нескольких комментариев. Я не знаю как сюда массив поставить
       name: getElement(NAMES)
     });
   }
   return photos;
-};
+}
 createPhotoArray(photosQuantity);
 
-var renderPhotos = function() { //не знаю, какой аргумент передавать в эту функцию
+var renderPhotos = function () {
   var photoElement = similarPictureTemplate.cloneNode(true);
 
-  photoElement.querySelector('.picture__img').setAttribute ('src', photos.avatar);
+  photoElement.querySelector('.picture__img').setAttribute('src', photos.avatar);
   photoElement.querySelector('.picture__likes').textContent = photos.likes;
   photoElement.querySelector('.picture__comments').textContent = photos.comments;
-  //куда вставлять names??
 
   return photoElement;
 };
