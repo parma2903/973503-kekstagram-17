@@ -18,7 +18,6 @@ var NAMES = [
   'Наташа',
   'Марина',
 ];
-var avatarQuantity = 6;
 
 var similarPictureTemplate = document.querySelector('#picture')
   .content
@@ -46,7 +45,7 @@ function createComments(number) {
   var comments = [];
   for (var i = 0; i <= number; i++) {
     comments.push({
-      avatar: createAvatar(avatarQuantity),
+      avatar: createAvatar(6),
       message: getElement(COMMENTS),
       name: getElement(NAMES)
     })
@@ -54,17 +53,17 @@ function createComments(number) {
 }
 
 function createPhotosArray(number) {
-  var photosArray = [];
+  var photos = [];
   for (var i = 1; i <= number; i++) {
-    photosArray.push({
+    photos.push({
       url: 'photos/' + i + '.jpg',
       likes: getRandomFromInterval(15, 200),
       comments: createComments(4),
     });
   }
-  return photosArray;
+  return photos;
 }
-var photos = createPhotosArray(photosQuantity);
+createPhotosArray(photosQuantity);
 
 var renderPhotos = function () {
   var photoElement = similarPictureTemplate.cloneNode(true);
