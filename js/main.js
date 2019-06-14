@@ -49,7 +49,7 @@ function createComments(number) {
       avatar: createAvatar(avatarQuantity),
       message: getElement(COMMENTS),
       name: getElement(NAMES)
-    })
+    });
   }
 }
 
