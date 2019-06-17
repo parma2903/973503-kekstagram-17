@@ -70,11 +70,10 @@ function renderPhoto(photo) {
   photoElement.querySelector('.picture__img').setAttribute('src', photo.url);
   photoElement.querySelector('.picture__likes').textContent = photo.likes;
   for (var i = 0; i < comments.length; i++) {
-    var comment = comments[i];
     photoElement.querySelector('.picture__comments').textContent = photo.comments;
   }
   return photoElement;
-};
+}
 
 for (var i = 0; i < photos.length; i++) {
   fragment.appendChild(renderPhoto(photos[i]));
