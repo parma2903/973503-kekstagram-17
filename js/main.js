@@ -19,12 +19,12 @@ var NAMES = [
   'Марина',
 ];
 var avatarQuantity = 6;
+var photosQuantity = 25;
 
 var similarPictureTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 var photosListElement = document.querySelector('.pictures');
-var photosQuantity = 25;
 var fragment = document.createDocumentFragment();
 
 function getElement(array) {
@@ -36,21 +36,19 @@ function getRandomFromInterval(min, max) {
 }
 
 function createAvatar(number) {
-  for (var i = 1; i <= number; i++) {
-    var avatar = 'img/avatar-' + i + '.svg';
-  }
-  return avatar;
+  return 'img/avatar-' + number + '.svg';
 }
 
 function createComments(number) {
   var comments = [];
   for (var i = 0; i <= number; i++) {
     comments.push({
-      avatar: createAvatar(avatarQuantity),
+      avatar: createAvatar(getRandomFromInterval(1, avatarQuantity)),
       message: getElement(COMMENTS),
       name: getElement(NAMES)
     });
   }
+  return comments;
 }
 
 function createPhotosArray(number) {
@@ -59,24 +57,26 @@ function createPhotosArray(number) {
     photosArray.push({
       url: 'photos/' + i + '.jpg',
       likes: getRandomFromInterval(15, 200),
-      comments: createComments(4),
+      comments: createComments(getRandomFromInterval(1, 4)),
     });
   }
   return photosArray;
 }
 var photos = createPhotosArray(photosQuantity);
 
-var renderPhotos = function () {
+function renderPhoto(photo) {
   var photoElement = similarPictureTemplate.cloneNode(true);
-
-  photoElement.querySelector('.picture__img').setAttribute('src', photos.avatar);
-  photoElement.querySelector('.picture__likes').textContent = photos.likes;
-  photoElement.querySelector('.picture__comments').textContent = photos.comments;
-
+  var comments = photo.comments;
+  photoElement.querySelector('.picture__img').setAttribute('src', photo.url);
+  photoElement.querySelector('.picture__likes').textContent = photo.likes;
+  for (var i = 0; i < comments.length; i++) {
+    var comment = comments[i];
+    photoElement.querySelector('.picture__comments').textContent = photo.comments;
+  }
   return photoElement;
 };
 
 for (var i = 0; i < photos.length; i++) {
-  fragment.appendChild(renderPhotos(photos[i]));
+  fragment.appendChild(renderPhoto(photos[i]));
 }
 photosListElement.appendChild(fragment);
