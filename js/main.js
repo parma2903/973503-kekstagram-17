@@ -24,14 +24,6 @@ var ZOOM_STEP = 25;
 
 var AVATAR_QUANTITY = 6;
 var PHOTOS_QUANTITY = 25;
-/*  var EFFECTS = [
-  'effects__preview--none',
-  'effects__preview--chrome',
-  'effects__preview--sepia',
-  'effects__preview--marvin',
-  'effects__preview--phobos',
-  'effects__preview--heat'
-];*/
 
 var EFFECTS_CLASS_PREFIX = 'effects__preview--';
 var EFFECTS_SETTINGS = {
@@ -73,11 +65,13 @@ var EFFECTS_SETTINGS = {
   },
 };
 
+var MAX_PERCENT = 100;
+
 var fragment = document.createDocumentFragment();
 
 var similarPictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 var photosListElement = document.querySelector('.pictures');
-var effectRadio = document.querySelectorAll('.effects__radio');
+var effectsRadio = document.querySelectorAll('.effects__radio');
 var uploadInput = document.querySelector('#upload-file');
 var uploadOverlay = document.querySelector('.img-upload__overlay');
 var uploadOverlayCloseBt = document.querySelector('.img-upload__cancel');
@@ -86,7 +80,10 @@ var uploadForm = document.querySelector('#upload-select-image');
 var effectDepth = uploadForm.querySelector('.effect-level__depth');
 var levelPin = uploadForm.querySelector('.effect-level__pin');
 var effectLevel = uploadForm.querySelector('.effect-level');
-/* var effectLevelValueElement = effectLevel.querySelector('.effect-level__value');*/
+var levelScaleEffect = document.querySelector('.scale__level');
+var inputEffectLevel = document.querySelector('[name="effect-level"]');
+var maxWidthEffectLine;
+/*  var effectLevelValueElement = effectLevel.querySelector('.effect-level__value');*/
 
 var uploadPreview = document.querySelector('.img-upload__preview');
 var imageUploadPreviewElement = uploadPreview.querySelector('img');
@@ -102,15 +99,15 @@ renderPhotos(photosCollection);
 
 uploadInput.addEventListener('change', function () {
   openUploadOverlay();
-  for (var i = 0; i < effectRadio.length; i++) {
-    effectRadio[i].addEventListener('click', chooseEffect);
+  for (var i = 0; i < effectsRadio.length; i++) {
+    effectsRadio[i].addEventListener('click', chooseEffect);
   }
 });
 
 uploadOverlayCloseBt.addEventListener('click', function () {
   closeUploadOverlay();
-  for (var i = 0; i < effectRadio.length; i++) {
-    effectRadio.removeEventListener('click', chooseEffect);
+  for (var i = 0; i < effectsRadio.length; i++) {
+    effectsRadio.removeEventListener('click', chooseEffect);
   }
 });
 
@@ -185,6 +182,10 @@ function onUploadOverlayEscPress(evt) {
 }
 
 function openUploadOverlay() {
+  effectsRadio[0].checked = true;
+  effectLevel.classList.add('hidden');
+  scaleControlValue.value = '100%';
+
   uploadOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onUploadOverlayEscPress);
 }
@@ -211,8 +212,14 @@ function chooseEffect(evt) {
 
   uploadPreview.classList.add(EFFECTS_CLASS_PREFIX + selectedEffect);
 
-  effectDepth.style.width = 0;
-  levelPin.style.left = 0;
+  effectDepth.style.width = '100%';
+  levelPin.style.left = '100%';
+}
+
+function updateEffect(effect) {
+  var currentWidth = levelScaleEffect.offsetWidth;
+  inputEffectLevel.value = Math.round(currentWidth / maxWidthEffectLine * MAX_PERCENT);
+  uploadPreview.style.filter = effect.getFilter(inputEffectLevel.value);
 }
 
 function changeIntensityEffect() {
@@ -220,8 +227,7 @@ function changeIntensityEffect() {
   var selectedEffectSettings = EFFECTS_SETTINGS[effect];
   var effectType = selectedEffectSettings.type;
   var effectValue = selectedEffectSettings.value;
-  var calculatedValue = 0;
-
+  var calculatedValue = updateEffect(effect);
   imageUploadPreviewElement.style.filter =
     effectType + '(' + calculatedValue + effectValue + ')';
 }
