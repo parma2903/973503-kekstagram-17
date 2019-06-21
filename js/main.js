@@ -35,37 +35,52 @@ var EFFECTS_SETTINGS = {
   },
   'chrome': {
     value: '',
+    calculatedValue: function (value) {
+      return value * 100;
+    },
     min: '0',
     max: '1',
     filter: 'grayscale',
   },
   'sepia': {
     value: '',
+    calculatedValue: function (value) {
+      return value * 100;
+    },
     min: '0',
     max: '1',
     filter: 'sepia',
   },
   'marvin': {
     value: '%',
+    calculatedValue: function (value) {
+      return value;
+    },
     min: '0',
     max: '100',
     filter: 'invert',
   },
   'phobos': {
     value: 'px',
+    calculatedValue: function (value) {
+      return value / 3 * 100;
+    },
     min: '0',
     max: '3',
     filter: 'blur',
   },
   'heat': {
     value: '',
+    calculatedValue: function (value) {
+      return (value - 1) / 2 * 100;
+    },
     min: '1',
     max: '3',
     filter: 'brightness',
   },
 };
 
-var MAX_PERCENT = 100;
+/* var MAX_PERCENT = 100;*/
 
 var fragment = document.createDocumentFragment();
 
@@ -80,10 +95,10 @@ var uploadForm = document.querySelector('#upload-select-image');
 var effectDepth = uploadForm.querySelector('.effect-level__depth');
 var levelPin = uploadForm.querySelector('.effect-level__pin');
 var effectLevel = uploadForm.querySelector('.effect-level');
-var levelScaleEffect = document.querySelector('.scale__level');
+/* var levelScaleEffect = document.querySelector('.effect-level__depth');
 var inputEffectLevel = document.querySelector('[name="effect-level"]');
-var maxWidthEffectLine;
-/*  var effectLevelValueElement = effectLevel.querySelector('.effect-level__value');*/
+var maxWidthEffectLine;*/
+var effectLevelValueElement = effectLevel.querySelector('.effect-level__value');
 
 var uploadPreview = document.querySelector('.img-upload__preview');
 var imageUploadPreviewElement = uploadPreview.querySelector('img');
@@ -216,18 +231,21 @@ function chooseEffect(evt) {
   levelPin.style.left = '100%';
 }
 
-function updateEffect(effect) {
+/* function updateEffect(effect) {
   var currentWidth = levelScaleEffect.offsetWidth;
   inputEffectLevel.value = Math.round(currentWidth / maxWidthEffectLine * MAX_PERCENT);
   uploadPreview.style.filter = effect.getFilter(inputEffectLevel.value);
-}
+}*/
 
 function changeIntensityEffect() {
   var effect = document.querySelector('.effects__radio[checked]').value;
   var selectedEffectSettings = EFFECTS_SETTINGS[effect];
   var effectType = selectedEffectSettings.type;
   var effectValue = selectedEffectSettings.value;
-  var calculatedValue = updateEffect(effect);
+  var effects = Object.keys(EFFECTS_SETTINGS);
+  for (var i = 0; i < effects.length; i++) {
+    effectLevelValueElement = effects[i].calculatedValue;
+  }
   imageUploadPreviewElement.style.filter =
     effectType + '(' + calculatedValue + effectValue + ')';
 }
