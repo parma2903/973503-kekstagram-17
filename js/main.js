@@ -36,7 +36,7 @@ var EFFECTS_SETTINGS = {
   'chrome': {
     value: '',
     calculatedValue: function (value) {
-      return value * 100;
+      return value / 100;
     },
     min: '0',
     max: '1',
@@ -45,7 +45,7 @@ var EFFECTS_SETTINGS = {
   'sepia': {
     value: '',
     calculatedValue: function (value) {
-      return value * 100;
+      return value / 100;
     },
     min: '0',
     max: '1',
@@ -63,7 +63,7 @@ var EFFECTS_SETTINGS = {
   'phobos': {
     value: 'px',
     calculatedValue: function (value) {
-      return value / 3 * 100;
+      return value / 100 * 3;
     },
     min: '0',
     max: '3',
@@ -72,15 +72,13 @@ var EFFECTS_SETTINGS = {
   'heat': {
     value: '',
     calculatedValue: function (value) {
-      return (value - 1) / 2 * 100;
+      return (value / 100) * 2 + 1;
     },
     min: '1',
     max: '3',
     filter: 'brightness',
   },
 };
-
-/* var MAX_PERCENT = 100;*/
 
 var fragment = document.createDocumentFragment();
 
@@ -95,9 +93,6 @@ var uploadForm = document.querySelector('#upload-select-image');
 var effectDepth = uploadForm.querySelector('.effect-level__depth');
 var levelPin = uploadForm.querySelector('.effect-level__pin');
 var effectLevel = uploadForm.querySelector('.effect-level');
-/* var levelScaleEffect = document.querySelector('.effect-level__depth');
-var inputEffectLevel = document.querySelector('[name="effect-level"]');
-var maxWidthEffectLine;*/
 var effectLevelValueElement = effectLevel.querySelector('.effect-level__value');
 
 var uploadPreview = document.querySelector('.img-upload__preview');
@@ -231,12 +226,6 @@ function chooseEffect(evt) {
   levelPin.style.left = '100%';
 }
 
-/* function updateEffect(effect) {
-  var currentWidth = levelScaleEffect.offsetWidth;
-  inputEffectLevel.value = Math.round(currentWidth / maxWidthEffectLine * MAX_PERCENT);
-  uploadPreview.style.filter = effect.getFilter(inputEffectLevel.value);
-}*/
-
 function changeIntensityEffect() {
   var effect = document.querySelector('.effects__radio[checked]').value;
   var selectedEffectSettings = EFFECTS_SETTINGS[effect];
@@ -247,7 +236,7 @@ function changeIntensityEffect() {
     effectLevelValueElement = effects[i].calculatedValue;
   }
   imageUploadPreviewElement.style.filter =
-    effectType + '(' + calculatedValue + effectValue + ')';
+    effectType + '(' + effectLevelValueElement + effectValue + ')';
 }
 
 function outZoom() {
