@@ -236,7 +236,6 @@ function changeIntensityEffect() {
   } else {
     imageUploadPreviewElement.style.filter = '';
   }
-  console.log('effectLevelValueElement.value');
 }
 
 function outZoom() {
