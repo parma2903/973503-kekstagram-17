@@ -35,32 +35,32 @@ var EFFECTS_SETTINGS = {
   },
   'chrome': {
     value: '',
-    min: '0',
-    max: '1',
+    min: 0,
+    max: 1,
     filter: 'grayscale',
   },
   'sepia': {
     value: '',
-    min: '0',
-    max: '1',
+    min: 0,
+    max: 1,
     filter: 'sepia',
   },
   'marvin': {
     value: '%',
-    min: '0',
-    max: '100',
+    min: 0,
+    max: 100,
     filter: 'invert',
   },
   'phobos': {
     value: 'px',
-    min: '0',
-    max: '3',
+    min: 0,
+    max: 3,
     filter: 'blur',
   },
   'heat': {
     value: '',
-    min: '1',
-    max: '3',
+    min: 1,
+    max: 3,
     filter: 'brightness',
   },
 };
@@ -87,14 +87,8 @@ var scaleControlSmaller = uploadOverlay.querySelector('.scale__control--smaller'
 var scaleControlBigger = uploadOverlay.querySelector('.scale__control--bigger');
 var scaleControlValue = uploadOverlay.querySelector('.scale__control--value');
 
-var effect = document.querySelector('.effects__radio[checked]').value; // marvin
-var selectedEffectSettings = EFFECTS_SETTINGS[effect]; // 'marvin': {value: '%', min: '0', max: '100', filter: 'invert',
-var effectType = selectedEffectSettings.filter; // invert
-var effectValue = selectedEffectSettings.value;
-
 var photosCollection = createPhotosArray(PHOTOS_QUANTITY);
 
-setZoomValue(100);
 renderPhotos(photosCollection);
 
 uploadInput.addEventListener('change', function () {
@@ -112,6 +106,7 @@ uploadOverlayCloseBt.addEventListener('click', function () {
 });
 
 levelPin.addEventListener('mouseup', function () {
+  changePinValue(getRandomFromInterval(0, 100));
   changeIntensityEffect();
 });
 
@@ -184,7 +179,7 @@ function onUploadOverlayEscPress(evt) {
 function openUploadOverlay() {
   effectsRadio[0].checked = true;
   effectLevel.classList.add('hidden');
-  scaleControlValue.value = '100%';
+  setZoomValue(100);
 
   uploadOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onUploadOverlayEscPress);
@@ -196,43 +191,50 @@ function closeUploadOverlay() {
 }
 
 function chooseEffect(evt) {
+  changeIntensityEffect();
+  changePinValue(100);
+  changeEffectClass(evt);
+}
+
+function changeEffectClass(evt) {
   var selectedEffect = evt.target.value;
   var effects = Object.keys(EFFECTS_SETTINGS);
-  /*  currentEffect = selectedEffect;*/
 
   if (evt.target.value === 'none') {
     effectLevel.classList.add('hidden');
-    imageUploadPreviewElement.style.filter = '';
   } else {
     effectLevel.classList.remove('hidden');
-    imageUploadPreviewElement.style.filter =
-      effectType + '(' + calculatedValue(effectLevelValueElement.value) + effectValue + ')';
   }
 
   for (var i = 0; i < effects.length; i++) {
-    uploadPreview.classList.remove(EFFECTS_CLASS_PREFIX + effects[i]);
+    imageUploadPreviewElement.classList.remove(EFFECTS_CLASS_PREFIX + effects[i]);
   }
 
-  uploadPreview.classList.add(EFFECTS_CLASS_PREFIX + selectedEffect);
-
-  changePinValue(100);
+  imageUploadPreviewElement.classList.add(EFFECTS_CLASS_PREFIX + selectedEffect);
 }
 
-function calculatedValue(value) {
-  return (value / 100) * (effect.max - effect.min) + effect.min;
+function calculateValue(value, min, max) {
+  var n = (parseInt(value, 10) / 100) * (max - min) + min;
+  return n.toFixed(2);
 }
 
 function changePinValue(value) {
   effectDepth.style.width = value + '%';
   levelPin.style.left = value + '%';
-  effectLevelValueElement.value = value + '%';
+  effectLevelValueElement.value = value;
 }
 
 function changeIntensityEffect() {
-  changePinValue(getRandomFromInterval(0, 100));
+  var effect = document.querySelector('.effects__radio:checked').value;
+  var selectedEffectSettings = EFFECTS_SETTINGS[effect];
+  var effectType = selectedEffectSettings.filter;
+  var effectValue = selectedEffectSettings.value;
+  var effectMin = selectedEffectSettings.min;
+  var effectMax = selectedEffectSettings.max;
+  var calculatedValue = calculateValue(effectLevelValueElement.value, effectMin, effectMax);
   if (effect !== 'none') {
     imageUploadPreviewElement.style.filter =
-      effectType + '(' + calculatedValue(effectLevelValueElement.value) + effectValue + ')';
+      effectType + '(' + calculatedValue + effectValue + ')';
   } else {
     imageUploadPreviewElement.style.filter = '';
   }
