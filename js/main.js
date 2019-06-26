@@ -214,8 +214,8 @@ function changeEffectClass(evt) {
 }
 
 function calculateValue(value, min, max) {
-  var n = (parseInt(value, 10) / 100) * (max - min) + min;
-  return n.toFixed(2);
+  var result = (parseInt(value, 10) / 100) * (max - min) + min;
+  return result.toFixed(2);
 }
 
 function changePinValue(value) {
@@ -226,17 +226,17 @@ function changePinValue(value) {
 
 function changeIntensityEffect() {
   var effect = document.querySelector('.effects__radio:checked').value;
-  var selectedEffectSettings = EFFECTS_SETTINGS[effect];
-  var effectType = selectedEffectSettings.filter;
-  var effectValue = selectedEffectSettings.value;
-  var effectMin = selectedEffectSettings.min;
-  var effectMax = selectedEffectSettings.max;
-  var calculatedValue = calculateValue(effectLevelValueElement.value, effectMin, effectMax);
-  if (effect !== 'none') {
-    imageUploadPreviewElement.style.filter =
-      effectType + '(' + calculatedValue + effectValue + ')';
-  } else {
+
+  if (effect === 'none') {
     imageUploadPreviewElement.style.filter = '';
+  } else {
+    var selectedEffectSettings = EFFECTS_SETTINGS[effect];
+    var effectType = selectedEffectSettings.filter;
+    var effectValue = selectedEffectSettings.value;
+    var effectMin = selectedEffectSettings.min;
+    var effectMax = selectedEffectSettings.max;
+    var calculatedValue = calculateValue(effectLevelValueElement.value, effectMin, effectMax);
+    imageUploadPreviewElement.style.filter = effectType + '(' + calculatedValue + effectValue + ')';
   }
 }
 
