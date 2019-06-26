@@ -87,6 +87,8 @@ var scaleControlSmaller = uploadOverlay.querySelector('.scale__control--smaller'
 var scaleControlBigger = uploadOverlay.querySelector('.scale__control--bigger');
 var scaleControlValue = uploadOverlay.querySelector('.scale__control--value');
 
+var textDescription = document.querySelector('.text__description');
+
 var photosCollection = createPhotosArray(PHOTOS_QUANTITY);
 
 renderPhotos(photosCollection);
@@ -116,6 +118,14 @@ scaleControlSmaller.addEventListener('click', function () {
 
 scaleControlBigger.addEventListener('click', function () {
   inZoom();
+});
+
+textDescription.addEventListener('focus', function () {
+  document.removeEventListener('keydown', onUploadOverlayEscPress);
+});
+
+textDescription.addEventListener('blur', function () {
+  document.addEventListener('keydown', onUploadOverlayEscPress);
 });
 
 function getElement(array) {
