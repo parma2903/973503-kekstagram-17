@@ -23,6 +23,8 @@
   var PHOTOS_QUANTITY = 25;
   var photosListElement = document.querySelector('.pictures');
   var photosCollection = createPhotosArray(PHOTOS_QUANTITY);
+  var fragment = document.createDocumentFragment();
+  var similarPictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
   renderPhotos(photosCollection);
 
@@ -56,13 +58,13 @@
 
   function renderPhotos(photos) {
     for (var i = 0; i < photos.length; i++) {
-      window.fragment.appendChild(renderPhoto(photos[i]));
+      fragment.appendChild(renderPhoto(photos[i]));
     }
-    photosListElement.appendChild(window.fragment);
+    photosListElement.appendChild(fragment);
   }
 
   function renderPhoto(photo) {
-    var photoElement = window.similarPictureTemplate.cloneNode(true);
+    var photoElement = similarPictureTemplate.cloneNode(true);
     photoElement.querySelector('.picture__img').setAttribute('src', photo.url);
     photoElement.querySelector('.picture__likes').textContent = photo.likes;
     photoElement.querySelector('.picture__comments').textContent = photo.comments.length;
