@@ -79,6 +79,7 @@ var effectDepth = uploadForm.querySelector('.effect-level__depth');
 var levelPin = uploadForm.querySelector('.effect-level__pin');
 var effectLevel = uploadForm.querySelector('.effect-level');
 var effectLevelValueElement = effectLevel.querySelector('.effect-level__value');
+var effectLevelLine = effectLevel.querySelector('.effect-level__line');
 
 var uploadPreview = document.querySelector('.img-upload__preview');
 var imageUploadPreviewElement = uploadPreview.querySelector('img');
@@ -108,8 +109,40 @@ uploadOverlayCloseBt.addEventListener('click', function () {
 });
 
 levelPin.addEventListener('mouseup', function () {
-  changePinValue(getRandomFromInterval(0, 100));
   changeIntensityEffect();
+});
+
+levelPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoordsX = evt.clientX;
+
+  function onMouseMove(moveEvt) {
+    moveEvt.preventDefault();
+
+    var shiftX = startCoordsX - moveEvt.clientX;
+    startCoordsX = moveEvt.clientX;
+
+    var pinElementLeft = levelPin.offsetLeft - shiftX;
+    var lineElementLeft = effectLevelLine.getBoundingClientRect().left;
+    var lineElementRight = effectLevelLine.getBoundingClientRect().right;
+    if (startCoordsX <= lineElementLeft) {
+      pinElementLeft = 0;
+    } else if (startCoordsX >= lineElementRight) {
+      pinElementLeft = effectLevelLine.clientWidth;
+    }
+
+    changePinValue(pinElementLeft);
+  }
+
+  function onMouseUp() {
+    changeIntensityEffect();
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  }
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
 });
 
 scaleControlSmaller.addEventListener('click', function () {
@@ -221,6 +254,10 @@ function changeEffectClass(evt) {
   }
 
   imageUploadPreviewElement.classList.add(EFFECTS_CLASS_PREFIX + selectedEffect);
+
+  effectDepth.style.width = '100%';
+  levelPin.style.left = '100%';
+  effectLevelValueElement.value = 100;
 }
 
 function calculateValue(value, min, max) {
@@ -228,7 +265,8 @@ function calculateValue(value, min, max) {
   return result.toFixed(2);
 }
 
-function changePinValue(value) {
+function changePinValue(position) {
+  var value = (position / effectLevelLine.clientWidth) * 100;
   effectDepth.style.width = value + '%';
   levelPin.style.left = value + '%';
   effectLevelValueElement.value = value;
