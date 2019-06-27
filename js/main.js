@@ -123,6 +123,15 @@ levelPin.addEventListener('mousedown', function (evt) {
     var shiftX = startCoordsX - moveEvt.clientX;
     startCoordsX = moveEvt.clientX;
 
+    var pinElementLeft = levelPin.offsetLeft - shiftX;
+    var lineElementLeft = effectLevelLine.getBoundingClientRect().left;
+    var lineElementRight = effectLevelLine.getBoundingClientRect().right;
+    if (startCoordsX <= lineElementLeft) {
+      pinElementLeft = 0;
+    } else if (startCoordsX >= lineElementRight) {
+      pinElementLeft = effectLevelLine.clientWidth;
+    }
+
     changePinValue(pinElementLeft);
   }
 
