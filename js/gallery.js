@@ -25,8 +25,11 @@
   var photosCollection = createPhotosArray(PHOTOS_QUANTITY);
   var fragment = document.createDocumentFragment();
   var similarPictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+  var URL = 'https://js.dump.academy/kekstagram/data';
 
-  renderPhotos(photosCollection);
+  window.load(URL, renderPhotos(photosCollection));
+
+  /*  renderPhotos(photosCollection);*/
 
   function createAvatar(number) {
     return 'img/avatar-' + number + '.svg';
