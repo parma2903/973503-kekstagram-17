@@ -5,14 +5,18 @@
   var fragment = document.createDocumentFragment();
   var similarPictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
   var filters = document.querySelector('.img-filters');
-  var URL = 'https://js.dump.academy/kekstagram/data';
-
-  window.backend.load(URL, renderPhotos);
 
   function renderPhotos(photos) {
     for (var i = 0; i < photos.length; i++) {
       fragment.appendChild(renderPhoto(photos[i]));
     }
+
+    var pictureElements = photosListElement.querySelectorAll('.picture');
+
+    for (i = 0; i < pictureElements.length; i++) {
+      photosListElement.removeChild(pictureElements[i]);
+    }
+
     photosListElement.appendChild(fragment);
     filters.classList.remove('img-filters--inactive');
   }
@@ -26,44 +30,12 @@
     return photoElement;
   }
 
-  var pics = [];
+  window.backend.load(function (arrPhotos) {
+    renderPhotos(arrPhotos);
+    window.filters.init(arrPhotos);
+  });
 
-  var filterForm = document.querySelector('.img-filters__form');
-  var filterPopular = filterForm.querySelector('#filter-popular');
-  var filterNew = filterForm.querySelector('#filter-new');
-  var filterDisc = filterForm.querySelector('#filter-discussed');
-
-  filterPopular.addEventListener('click', onPopularClickHandler);
-  filterNew.addEventListener('click', onNewClickHandler);
-  filterDisc.addEventListener('click', onDiscClickHandler);
-
-  function onPopularClickHandler() {
-    renderPhotos(pics);
-  }
-
-  function onNewClickHandler() {
-    var filtered = pics.slice().sort(function () {
-      return Math.random() - 0.5;
-    }).slice(0, 10);
-    renderPhotos(filtered);
-  }
-
-  function onDiscClickHandler() {
-    var filtered = pics.slice().sort(function (a, b) {
-      if (a.comments.length > b.comments.length) {
-        return -1;
-      }
-      if (a.comments.length < b.comments.length) {
-        return 1;
-      }
-      return 0;
-    });
-    renderPhotos(filtered);
-  }
-
-  function onfiltersClick(evt) {
-    window.util.debounce(evt);
-  }
-
-  filterForm.addEventListener('click', onfiltersClick);
+  window.gallery = {
+    render: renderPhotos
+  };
 })();
