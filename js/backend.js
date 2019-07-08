@@ -1,7 +1,10 @@
 'use strict';
 
 (function () {
-  function load(url, onSuccess, onError) {
+  var UPLOAD_URL = 'https://js.dump.academy/kekstagram';
+  var DOWNLOAD_URL = 'https://js.dump.academy/kekstagram/data';
+
+  function load(onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -38,9 +41,51 @@
       }
     });
 
-    xhr.open('GET', url);
+    xhr.open('GET', DOWNLOAD_URL);
     xhr.send();
   }
+
+  function save(data, onSuccess, onError) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+
+    xhr.addEventListener('error', function () {
+      onError('Произошла ошибка соединения');
+    });
+    xhr.addEventListener('timeout', function () {
+      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+    });
+
+    xhr.timeout = 10000;
+
+    xhr.addEventListener('load', function () {
+      var error;
+      switch (xhr.status) {
+        case 200:
+          onSuccess(xhr.response);
+          break;
+        case 400:
+          error = 'Неверный запрос';
+          break;
+        case 401:
+          error = 'Пользователь не авторизован';
+          break;
+        case 404:
+          error = 'Ничего не найдено';
+          break;
+        default:
+          error = 'Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
+      }
+
+      if (error) {
+        onError(error);
+      }
+    });
+
+    xhr.open('POST', UPLOAD_URL);
+    xhr.send(data);
+  }
+
 
   function errorHandler(errorMessage) {
     var node = document.createElement('div');
@@ -57,6 +102,7 @@
 
   window.backend = {
     load: load,
+    save: save,
     errorHandler: errorHandler
   };
 })();
