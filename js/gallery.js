@@ -26,16 +26,31 @@
     photoElement.querySelector('.picture__img').setAttribute('src', photo.url);
     photoElement.querySelector('.picture__likes').textContent = photo.likes;
     photoElement.querySelector('.picture__comments').textContent = photo.comments.length;
+    photoElement.dataset.id = photo.id;
 
     return photoElement;
   }
 
   window.backend.load(function (arrPhotos) {
+    arrPhotos.forEach(function (it, index) {
+      it.id = index;
+    });
+
     renderPhotos(arrPhotos);
     window.filters.init(arrPhotos);
 
-    window.photo.show(arrPhotos[0]);
-    document.querySelector('.big-picture').classList.remove('hidden');
+    photosListElement.addEventListener('click', function (evt) {
+      var target = evt.target;
+
+      while (target !== photosListElement) {
+        if (target.classList.contains('picture')) {
+          evt.preventDefault();
+          window.photo.show(arrPhotos[target.dataset.id]);
+          return;
+        }
+        target = target.parentNode;
+      }
+    });
   });
 
   window.gallery = {

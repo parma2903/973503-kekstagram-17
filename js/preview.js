@@ -2,8 +2,9 @@
 
 (function () {
   var bigPicture = document.querySelector('.big-picture');
+  var photoPopup = window.popup(bigPicture);
 
-  function show(photo) {
+  function showPreview(photo) {
     bigPicture.querySelector('.big-picture__img img').src = photo.url;
     bigPicture.querySelector('.likes-count').textContent = photo.likes;
     bigPicture.querySelector('.comments-count').textContent = photo.comments.length;
@@ -15,17 +16,20 @@
     comments.innerHTML = '';
     photo.comments.forEach(function (comment) {
       var currentComment = commentElement.cloneNode(true);
+      var commentAvatar = currentComment.querySelector('.social__picture');
 
-      currentComment.querySelector('.social__picture').src = comment.avatar;
+      commentAvatar.src = comment.avatar;
+      commentAvatar.alt = comment.name;
       currentComment.querySelector('.social__text').textContent = comment.message;
       comments.appendChild(currentComment);
     });
 
     bigPicture.querySelector('.social__comment-count').classList.add('visually-hidden');
     bigPicture.querySelector('.comments-loader').classList.add('visually-hidden');
+    photoPopup.open();
   }
 
   window.photo = {
-    show: show
+    show: showPreview
   };
 })();
