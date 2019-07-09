@@ -26,13 +26,9 @@
       },
 
       onPopupEscPress: function (evt) {
-        if (evt.keyCode === ESC_KEYCODE && newPopup.checkClosePossibility(evt.target)) {
+        if (evt.keyCode === ESC_KEYCODE) {
           newPopup.close();
         }
-      },
-
-      checkClosePossibility: function () {
-        return true;
       },
 
       onPopupClose: function () {}

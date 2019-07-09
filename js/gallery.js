@@ -6,6 +6,28 @@
   var similarPictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
   var filters = document.querySelector('.img-filters');
 
+  window.backend.load(function (arrPhotos) {
+    arrPhotos.forEach(function (it, index) {
+      it.id = index;
+    });
+
+    renderPhotos(arrPhotos);
+    window.filters.init(arrPhotos);
+
+    photosListElement.addEventListener('click', function (evt) {
+      var target = evt.target;
+
+      while (target !== photosListElement) {
+        if (target.classList.contains('picture')) {
+          evt.preventDefault();
+          window.photo.show(arrPhotos[target.dataset.id]);
+          return;
+        }
+        target = target.parentNode;
+      }
+    });
+  });
+
   function renderPhotos(photos) {
     for (var i = 0; i < photos.length; i++) {
       fragment.appendChild(renderPhoto(photos[i]));
@@ -30,28 +52,6 @@
 
     return photoElement;
   }
-
-  window.backend.load(function (arrPhotos) {
-    arrPhotos.forEach(function (it, index) {
-      it.id = index;
-    });
-
-    renderPhotos(arrPhotos);
-    window.filters.init(arrPhotos);
-
-    photosListElement.addEventListener('click', function (evt) {
-      var target = evt.target;
-
-      while (target !== photosListElement) {
-        if (target.classList.contains('picture')) {
-          evt.preventDefault();
-          window.photo.show(arrPhotos[target.dataset.id]);
-          return;
-        }
-        target = target.parentNode;
-      }
-    });
-  });
 
   window.gallery = {
     render: renderPhotos
