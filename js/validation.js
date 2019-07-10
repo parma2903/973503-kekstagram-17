@@ -10,6 +10,10 @@
   forbidCloseFormElementFocus(window.textHashtags);
 
   window.textHashtags.addEventListener('change', function () {
+    window.validateTag();
+  });
+
+  window.validateTag = function () {
     var invalidMessage = [];
     var inputText = window.textHashtags.value.toLowerCase();
     if (inputText) {
@@ -58,7 +62,7 @@
     }
 
     window.textHashtags.setCustomValidity(invalidMessage.join('. \n'));
-  });
+  };
 
   function forbidCloseFormElementFocus(element) {
     element.addEventListener('focus', function () {
