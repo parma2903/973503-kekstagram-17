@@ -23,6 +23,7 @@
         newPopup.onPopupClose();
         document.body.classList.remove(MODAL_OPEN_CLASS);
         document.removeEventListener('keydown', this.onPopupEscPress);
+        window.textHashtags.removeEventListener('change', function () {});
       },
 
       onPopupEscPress: function (evt) {

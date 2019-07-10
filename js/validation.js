@@ -1,15 +1,17 @@
 'use strict';
 
 (function () {
+  var HASHTAG_MAX_LENGTH = 20;
+  var HASHTAGS_MAX_COUNT = 5;
   var textDescription = document.querySelector('.text__description');
-  var textHashtags = document.querySelector('.text__hashtags');
+  window.textHashtags = document.querySelector('.text__hashtags');
 
   forbidCloseFormElementFocus(textDescription);
-  forbidCloseFormElementFocus(textHashtags);
+  forbidCloseFormElementFocus(window.textHashtags);
 
-  textHashtags.addEventListener('change', function () {
+  window.textHashtags.addEventListener('change', function () {
     var invalidMessage = [];
-    var inputText = textHashtags.value.toLowerCase();
+    var inputText = window.textHashtags.value.toLowerCase();
     if (!inputText) {
       return;
     }
@@ -47,17 +49,17 @@
     }
 
     var isLongHashtag = inputArray.some(function (item) {
-      return item.length > 20;
+      return item.length > HASHTAG_MAX_LENGTH;
     });
     if (isLongHashtag) {
       invalidMessage.push('Максимальная длина одного хэш-тега 20 символов, включая решётку');
     }
 
-    if (inputArray.length > 5) {
+    if (inputArray.length > HASHTAGS_MAX_COUNT) {
       invalidMessage.push('Нельзя указать больше пяти хэш-тегов');
     }
 
-    textHashtags.setCustomValidity(invalidMessage.join('. \n'));
+    window.textHashtags.setCustomValidity(invalidMessage.join('. \n'));
   });
 
   function forbidCloseFormElementFocus(element) {
