@@ -17,7 +17,7 @@
   uploadOverlayCloseBt.addEventListener('click', function () {
     closeUploadOverlay();
     for (var i = 0; i < effectsRadio.length; i++) {
-      effectsRadio.removeEventListener('click', window.chooseEffect);
+      effectsRadio[i].removeEventListener('click', window.chooseEffect);
     }
   });
 
