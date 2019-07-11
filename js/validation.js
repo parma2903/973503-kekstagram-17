@@ -18,8 +18,8 @@
   forbidCloseFormElementFocus(textDescription);
   forbidCloseFormElementFocus(window.textHashtags);
 
-  window.validateTag = function (tag, hashtags) {
-    if (tag.length === HASHTAG_MIN_LENGTH && tag.slice(0, 1) === '#') {
+  function validateTag(tag, hashtags) {
+    if (tag.length === HASHTAG_MIN_LENGTH && tag.indexOf('#') === 0) {
       return HashtagMessages.TAG_TOO_SHORT;
 
     } else if (tag.length === 0) {
@@ -28,7 +28,7 @@
     } else if (tag.length > HASHTAG_MAX_LENGTH) {
       return HashtagMessages.TAG_TOO_LONG;
 
-    } else if (tag.slice(0, 1) !== '#') {
+    } else if (tag.indexOf('#') !== 0) {
       return HashtagMessages.WRONG_FIRST_SYMBOL;
 
     } else {
@@ -42,9 +42,9 @@
     }
 
     return false;
-  };
+  }
 
-  window.textHashtags.addEventListener('change', function (evt) {
+  window.textHashtags.validateInput = function (evt) {
     var hashtags = evt.target.value.toLowerCase().trim().split(' ');
     var errors = {};
 
@@ -53,7 +53,7 @@
     }
 
     for (var i = 0; i < hashtags.length; i++) {
-      var message = window.validateTag(hashtags[i], hashtags);
+      var message = validateTag(hashtags[i], hashtags);
 
       if (message) {
         errors[message] = true;
@@ -61,7 +61,7 @@
     }
 
     evt.target.setCustomValidity(Object.keys(errors).join('; '));
-  });
+  };
 
   function forbidCloseFormElementFocus(element) {
     element.addEventListener('focus', function () {
