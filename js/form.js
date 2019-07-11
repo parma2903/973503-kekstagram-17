@@ -17,7 +17,7 @@
   uploadOverlayCloseBt.addEventListener('click', function () {
     closeUploadOverlay();
     for (var i = 0; i < effectsRadio.length; i++) {
-      effectsRadio.removeEventListener('click', window.chooseEffect);
+      effectsRadio[i].removeEventListener('click', window.chooseEffect);
     }
   });
 
@@ -30,13 +30,16 @@
   function closeUploadOverlay() {
     window.uploadOverlay.classList.add('hidden');
     document.removeEventListener('keydown', window.onUploadOverlayEscPress);
+    window.textHashtags.removeEventListener('change', window.textHashtags.validateInput);
+    window.textHashtags.value = '';
+    window.textHashtags.setCustomValidity('');
   }
 
   function openUploadOverlay() {
     effectsRadio[0].checked = true;
     window.effectLevel.classList.add('hidden');
     window.setZoomValue(100);
-
+    window.textHashtags.addEventListener('change', window.textHashtags.validateInput);
     window.uploadOverlay.classList.remove('hidden');
     document.addEventListener('keydown', window.onUploadOverlayEscPress);
   }
