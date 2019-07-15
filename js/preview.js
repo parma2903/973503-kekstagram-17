@@ -27,6 +27,7 @@
     bigPicture.querySelector('.social__comment-count').classList.add('visually-hidden');
     bigPicture.querySelector('.comments-loader').classList.add('visually-hidden');
     photoPopup.open();
+    document.body.classList.add('modal-open');
   }
 
   window.photo = {

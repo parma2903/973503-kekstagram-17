@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var textDescription = document.querySelector('.text__description');
+  window.textDescription = document.querySelector('.text__description');
   var form = document.querySelector('.img-upload__form');
   window.textHashtags = form.querySelector('.text__hashtags');
   var HASHTAG_MIN_LENGTH = 1;
@@ -15,7 +15,7 @@
     TAG_TOO_LONG: 'Максимальная длина хеш-тега: ' + HASHTAG_MAX_LENGTH + ' символов'
   };
 
-  forbidCloseFormElementFocus(textDescription);
+  forbidCloseFormElementFocus(window.textDescription);
   forbidCloseFormElementFocus(window.textHashtags);
 
   function validateTag(tag, hashtags) {
