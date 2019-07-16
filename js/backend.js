@@ -8,10 +8,10 @@
 
   imgUploadForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(imgUploadForm), onSucces);
+    window.backend.save(new FormData(imgUploadForm), isSuccess);
   });
 
-  function onSucces() {
+  function isSuccess() {
     window.closeUploadOverlay();
     resetImgUpload();
     openDialog('success');

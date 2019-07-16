@@ -2,6 +2,7 @@
 
 (function () {
   var FILTER_ACTIVE_CLASS = 'img-filters__button--active';
+  var NEW_PHOTOS_COUNT = 10;
 
   var filters = document.querySelector('.img-filters');
 
@@ -23,7 +24,7 @@
 
     switch (filterId) {
       case 'filter-new':
-        newPhotos = arrPhotos.slice().sort(compareRandom);
+        newPhotos = arrPhotos.slice().sort(compareRandom).slice(0, NEW_PHOTOS_COUNT);
         break;
       case 'filter-discussed':
         newPhotos = arrPhotos.slice().sort(compareComments);
