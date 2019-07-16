@@ -5,19 +5,19 @@
   window.uploadOverlay = document.querySelector('.img-upload__overlay');
   var uploadOverlayCloseBt = document.querySelector('.img-upload__cancel');
 
-  var effectsRadio = document.querySelectorAll('.effects__radio');
+  var radioEffects = document.querySelectorAll('.effects__radio');
 
   window.uploadInput.addEventListener('change', function () {
     openUploadOverlay();
-    for (var i = 0; i < effectsRadio.length; i++) {
-      effectsRadio[i].addEventListener('click', window.chooseEffect);
+    for (var i = 0; i < radioEffects.length; i++) {
+      radioEffects[i].addEventListener('click', window.chooseEffect);
     }
   });
 
   uploadOverlayCloseBt.addEventListener('click', function () {
     window.closeUploadOverlay();
-    for (var i = 0; i < effectsRadio.length; i++) {
-      effectsRadio[i].removeEventListener('click', window.chooseEffect);
+    for (var i = 0; i < radioEffects.length; i++) {
+      radioEffects[i].removeEventListener('click', window.chooseEffect);
     }
   });
 
@@ -35,12 +35,11 @@
   };
 
   function openUploadOverlay() {
-    effectsRadio[0].checked = true;
+    radioEffects[0].checked = true;
     window.effectLevel.classList.add('hidden');
     window.setZoomValue(100);
     window.textHashtags.addEventListener('change', window.textHashtags.validateInput);
     window.uploadOverlay.classList.remove('hidden');
     document.addEventListener('keydown', window.onUploadOverlayEscPress);
   }
-
 })();

@@ -1,12 +1,12 @@
 'use strict';
 
 (function () {
-  window.textDescription = document.querySelector('.text__description');
-  var form = document.querySelector('.img-upload__form');
-  window.textHashtags = form.querySelector('.text__hashtags');
   var HASHTAG_MIN_LENGTH = 1;
   var HASHTAG_MAX_LENGTH = 20;
   var HASHTAGS_MAX_COUNT = 5;
+  window.textDescription = document.querySelector('.text__description');
+  var form = document.querySelector('.img-upload__form');
+  window.textHashtags = form.querySelector('.text__hashtags');
   var HashtagMessages = {
     WRONG_FIRST_SYMBOL: 'Хеш-теги должны начинаться с символа #',
     TAG_TOO_SHORT: 'Хеш-тег не может состоять только из #',
@@ -61,6 +61,10 @@
     }
 
     evt.target.setCustomValidity(Object.keys(errors).join('; '));
+
+    if (window.textHashtags.validationMessage) {
+      window.textHashtags.style.outlineColor = 'red';
+    }
   };
 
   function forbidCloseFormElementFocus(element) {

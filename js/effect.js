@@ -2,7 +2,7 @@
 
 (function () {
   var EFFECTS_CLASS_PREFIX = 'effects__preview--';
-  var EFFECTS_SETTINGS = {
+  var EffectsSettings = {
     'none': {
       value: '',
       min: '',
@@ -95,7 +95,7 @@
 
   function changeEffectClass(evt) {
     var selectedEffect = evt.target.value;
-    var effects = Object.keys(EFFECTS_SETTINGS);
+    var effects = Object.keys(EffectsSettings);
 
     if (evt.target.value === 'none') {
       window.effectLevel.classList.add('hidden');
@@ -123,17 +123,17 @@
     var value = (position / effectLevelLine.clientWidth) * 100;
     effectDepth.style.width = value + '%';
     levelPin.style.left = value + '%';
-    effectLevelValueElement.value = value;
+    effectLevelValueElement.value = parseInt(value, 10);
   }
 
   function changeIntensityEffect() {
-    var effect = document.querySelector('.effects__radio:checked').value;
+    var effect = document.querySelector('.effects__radio:checked').value.toLowerCase();
 
     if (effect === 'none') {
       window.imageUploadPreviewElement.style.filter = '';
     } else {
-      var selectedEffectSettings = EFFECTS_SETTINGS[effect];
-      var effectType = selectedEffectSettings.filter;
+      var selectedEffectSettings = EffectsSettings[effect];
+      var effectType = selectedEffectSettings.filter.toLowerCase();
       var effectValue = selectedEffectSettings.value;
       var effectMin = selectedEffectSettings.min;
       var effectMax = selectedEffectSettings.max;

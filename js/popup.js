@@ -8,7 +8,7 @@
 
   window.popup = function (popupElement) {
     var Popup = function () {
-      this.closeBtn = popupElement.querySelector('.js-popup-close');
+      this.closeBtn = popupElement.querySelector('.big-picture__cancel');
     };
 
     Popup.prototype = {
@@ -23,7 +23,7 @@
         newPopup.onPopupClose();
         document.body.classList.remove(MODAL_OPEN_CLASS);
         document.removeEventListener('keydown', this.onPopupEscPress);
-
+        window.commentsLoader.removeEventListener('click', window.createFiveComments);
       },
 
       onPopupEscPress: function (evt) {
